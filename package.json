@@ -27,9 +27,12 @@
   },
   "dependencies": {
     "commander": "^13.1.0",
+    "glob": "^11.0.1",
+    "pdf-lib": "^1.17.1",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
+    "@types/glob": "^8.1.0",
     "@types/node": "^22.13.1",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "@typescript-eslint/parser": "^8.23.0",
