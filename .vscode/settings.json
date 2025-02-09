@@ -1,0 +1,15 @@
+{
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+    "typescript"
+  ],
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "files.eol": "\n"
+}

@@ -5,17 +5,14 @@ import sharp from "sharp";
 
 const program = new Command();
 
-program
-  .name("batch-paper")
-  .description("CLI tool for batch image processing")
-  .version("1.0.0");
+program.name("batch-paper").description("CLI tool for batch image processing").version("1.0.0");
 
 program
   .command("hello")
   .description("Display a hello message and sharp version")
   .action(() => {
-    console.log("Hello from batch-paper!");
-    console.log(`Sharp version: ${sharp.versions.sharp}`);
+    console.info("Hello from batch-paper!");
+    console.info(`Sharp version: ${sharp.versions.sharp}`);
   });
 
 program.parse();
