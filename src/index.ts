@@ -2,7 +2,6 @@
 
 import { Command } from "commander";
 import sharp from "sharp";
-import { PDFDocument } from "pdf-lib";
 import { glob } from "glob";
 import path from "path";
 import fs from "fs";
@@ -14,7 +13,7 @@ program
   .description("CLI tool for batch converting PNGs to PDFs for printing.")
   .version("1.0.0");
 
-const ICC_PROFILE_PATH = path.join(__dirname, "../assets/GRACoL2013_CRPC6.icc");
+const ICC_PROFILE_PATH = path.resolve(__dirname, "../assets/GRACoL2013_CRPC6.icc");
 
 async function processImage(inputPath: string, outputDir: string): Promise<void> {
   try {
@@ -22,10 +21,8 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
     fs.mkdirSync(outputDir, { recursive: true });
 
     // Prepare output filename (change extension to pdf)
-    const outputPath = path.join(
-      outputDir,
-      `${path.basename(inputPath, path.extname(inputPath))}.pdf`
-    );
+    const basePath = path.join(outputDir, `${path.basename(inputPath, path.extname(inputPath))}`);
+    const outputPath = `${basePath}.pdf`;
 
     // Load and process the image with Sharp
     const image = sharp(inputPath);
@@ -37,30 +34,32 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
     }
 
     // Convert to CMYK and embed ICC profile
-    const processedBuffer = await image
-      .toColorspace("cmyk")
-      .withIccProfile(ICC_PROFILE_PATH, { attach: true })
-      .withMetadata({ density: 600 })
-      .toFormat("jpg", { quality: 100 })
-      .toBuffer();
+    const tiffPath = `${basePath}.tiff`;
+    const tiff = image
+      .withMetadata({ density: 600, icc: ICC_PROFILE_PATH })
+      .toColourspace("cmyk")
+      .tiff({
+        compression: "lzw",
+        resolutionUnit: "inch",
+        xres: 600,
+        yres: 600,
+      })
+      .withIccProfile(ICC_PROFILE_PATH, { attach: true });
+
+    const tiffOutput = await tiff.toFile(tiffPath);
+    console.log(
+      "Converted to CMYK",
+      "\nImage Metadata:",
+      await tiff.metadata(),
+      "File output:",
+      tiffOutput
+    );
 
     // Create a new PDF document
-    const pdfDoc = await PDFDocument.create();
-
-    // Add the image as a page
-    const page = pdfDoc.addPage([metadata.width, metadata.height]);
-    const pngImage = await pdfDoc.embedJpg(processedBuffer);
-
-    page.drawImage(pngImage, {
-      x: 0,
-      y: 0,
-      width: metadata.width,
-      height: metadata.height,
-    });
+    console.log("STUB: CREATE A NEW PDF HERE.");
 
     // Save the PDF
-    const pdfBytes = await pdfDoc.save();
-    fs.writeFileSync(outputPath, pdfBytes, { flag: "w" });
+    // fs.writeFileSync(outputPath, pdfBytes, { flag: "w" });
 
     console.log(`Processed: ${inputPath} -> ${outputPath}`);
   } catch (error: unknown) {
