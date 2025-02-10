@@ -52,6 +52,8 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
     }
 
     // Create a new PDF document
+    // TODO: Figure out why imagemagick is not preserving the ICC profile.
+    // $ identify -verbose [tiff_path]
     await convert(
       tiffPath,
       "-profile",
