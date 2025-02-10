@@ -5,6 +5,9 @@ import sharp from "sharp";
 import { glob } from "glob";
 import path from "path";
 import fs from "fs";
+import { convert } from "./image";
+
+const DEBUG = true;
 
 const program = new Command();
 
@@ -27,7 +30,6 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
     // Load and process the image with Sharp
     const image = sharp(inputPath);
     const metadata = await image.metadata();
-    console.log("Processing:", inputPath, "\nImage Metadata:", metadata);
 
     if (!metadata.width || !metadata.height) {
       throw new Error("Could not determine image dimensions");
@@ -41,25 +43,25 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
       .tiff({
         compression: "lzw",
         resolutionUnit: "inch",
-        xres: 600,
-        yres: 600,
       })
       .withIccProfile(ICC_PROFILE_PATH, { attach: true });
 
-    const tiffOutput = await tiff.toFile(tiffPath);
-    console.log(
-      "Converted to CMYK",
-      "\nImage Metadata:",
-      await tiff.metadata(),
-      "File output:",
-      tiffOutput
-    );
+    if (DEBUG) {
+      const tiffOutput = await tiff.toFile(tiffPath);
+      console.log("TIFF output:", tiffOutput);
+    }
 
     // Create a new PDF document
-    console.log("STUB: CREATE A NEW PDF HERE.");
-
-    // Save the PDF
-    // fs.writeFileSync(outputPath, pdfBytes, { flag: "w" });
+    await convert(
+      tiffPath,
+      "-profile",
+      ICC_PROFILE_PATH,
+      "-colorspace",
+      "cmyk",
+      "-density",
+      "600",
+      outputPath
+    );
 
     console.log(`Processed: ${inputPath} -> ${outputPath}`);
   } catch (error: unknown) {
