@@ -102,9 +102,4 @@ npm run dev
 
 # Build the TypeScript code
 npm run build
-
-# Create executables
-npm run package
 ```
-
-The executables will be created in the `executables` directory for both macOS and Windows.
