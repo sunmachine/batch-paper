@@ -5,9 +5,8 @@ import sharp from "sharp";
 import { glob } from "glob";
 import path from "path";
 import fs from "fs";
-import { convert } from "./image";
 
-const DEBUG = true;
+const DEBUG = false;
 
 const program = new Command();
 
@@ -25,7 +24,7 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
 
     // Prepare output filename (change extension to pdf)
     const basePath = path.join(outputDir, `${path.basename(inputPath, path.extname(inputPath))}`);
-    const outputPath = `${basePath}.pdf`;
+    const outputPath = `${basePath}.tiff`;
 
     // Load and process the image with Sharp
     const image = sharp(inputPath);
@@ -36,7 +35,6 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
     }
 
     // Convert to CMYK and embed ICC profile
-    const tiffPath = `${basePath}.tiff`;
     const tiff = image
       .withMetadata({ density: 600, icc: ICC_PROFILE_PATH })
       .toColourspace("cmyk")
@@ -47,25 +45,15 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
       .withIccProfile(ICC_PROFILE_PATH, { attach: true });
 
     if (DEBUG) {
-      const tiffOutput = await tiff.toFile(tiffPath);
-      console.log("TIFF output:", tiffOutput);
+      const tiffOutput = await tiff.toFile(outputPath);
+      console.log("Processed TIFF output:", tiffOutput);
     }
 
     // Create a new PDF document
     // TODO: Figure out why imagemagick is not preserving the ICC profile.
     // $ identify -verbose [tiff_path]
-    await convert(
-      tiffPath,
-      "-profile",
-      ICC_PROFILE_PATH,
-      "-colorspace",
-      "cmyk",
-      "-density",
-      "600",
-      outputPath
-    );
-
-    console.log(`Processed: ${inputPath} -> ${outputPath}`);
+    // TODO: Try again later.
+    // console.log(`Processed: ${inputPath} -> ${outputPath}`);
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(`Error processing ${inputPath}:`, error.message);
