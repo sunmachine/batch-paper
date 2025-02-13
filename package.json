@@ -12,7 +12,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
-    "package": "pkg .",
+    "package": "PYTHON=/usr/local/bin/python3 pnpm run build && PYTHON=/usr/local/bin/python3 DEBUG=nexe* nexe dist/index.js -t mac-x64-22.14.0 --build",
+    "package:win": "PYTHON=/usr/local/bin/python3 pnpm run build && PYTHON=/usr/local/bin/python3 DEBUG=nexe* nexe dist/index.js -t windows-x64-22.14.0 --build",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -45,6 +46,7 @@
     "eslint": "^9.20.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "nexe": "^4.0.0-rc.2",
     "prettier": "^3.5.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
