@@ -44,16 +44,14 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
       })
       .withIccProfile(ICC_PROFILE_PATH, { attach: true });
 
-    if (DEBUG) {
-      const tiffOutput = await tiff.toFile(outputPath);
-      console.log("Processed TIFF output:", tiffOutput);
-    }
+    const tiffOutput = await tiff.toFile(outputPath);
+    console.log("Processed TIFF output:", tiffOutput);
 
     // Create a new PDF document
     // TODO: Figure out why imagemagick is not preserving the ICC profile.
     // $ identify -verbose [tiff_path]
     // TODO: Try again later.
-    // console.log(`Processed: ${inputPath} -> ${outputPath}`);
+    console.log(`Processed: ${inputPath} -> ${outputPath}`);
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(`Error processing ${inputPath}:`, error.message);
@@ -65,8 +63,13 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
 
 program
   .command("process")
-  .description("Process PNG files and convert them to CMYK PDFs")
-  .argument("<paths...>", "File or directory paths to process")
+  .description(
+    "Process PNG files and convert them to CMYK PDFs. Supports both individual files and directories."
+  )
+  .argument(
+    "<paths...>",
+    "One or more paths to PNG files or directories containing PNGs (processes recursively)"
+  )
   .option("-o, --output <dir>", "Output directory (defaults to ./output in current directory)")
   .action(async (paths: string[], options: { output?: string }) => {
     // Use specified output directory or default to cwd/output
