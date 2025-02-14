@@ -16,12 +16,25 @@ This tool requires Node.js version 22.x or later. Please follow the instructions
    - Follow the installation wizard, keeping all default settings
    - Click "Finish" when complete
 
-2. Verify installation:
-   - Open Command Prompt (press Win + R, type `cmd`, press Enter)
+2. Open a terminal (choose one of these options):
+
+   Option A - Command Prompt (Admin):
+   - Right-click on the Start button
+   - Select "Windows Terminal (Admin)" or "Command Prompt (Admin)"
+   - Click "Yes" when prompted by User Account Control
+
+   Option B - PowerShell:
+   - Press Win + X and select "Windows PowerShell" or "Windows Terminal"
+   - Enable script execution (one-time setup):
+     ```powershell
+     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+     ```
+   - Type "Y" when prompted to confirm
+
+3. Verify installation:
    - Type `node --version` and press Enter
    - It should start with "v22."
-   - Type `npm --version` and press Enter
-   - This should show a version number (exact version may vary)
+   - Continue to the next steps or install the correct version!
 
 ### macOS Users
 
@@ -36,8 +49,7 @@ This tool requires Node.js version 22.x or later. Please follow the instructions
    - Open Terminal (press Cmd + Space, type "Terminal", press Enter)
    - Type `node --version` and press Enter
    - It should start with "v22."
-   - Type `npm --version` and press Enter
-   - This should show a version number (exact version may vary)
+   - Continue to the next steps or install the correct version!
 
 ## Using the Tool
 
@@ -53,21 +65,27 @@ This tool requires Node.js version 22.x or later. Please follow the instructions
    ```bash
    npm install
    npm run build
+   npm link  # Makes the 'batch-paper' command available globally
    ```
 
 3. Process your PNG files:
    ```bash
    # Process a single PNG file
-   npm start process path/to/your/image.png
+   batch-paper process path/to/your/image.png
 
    # Process all PNGs in a directory
-   npm start process path/to/your/folder
+   batch-paper process path/to/your/folder
 
    # Specify custom output directory
-   npm start process path/to/your/folder -o path/to/output
+   batch-paper process path/to/your/folder -o path/to/output
    ```
 
    The processed files will be saved in the `output` directory by default.
+
+   Note: If you prefer not to install globally, you can still use `npm start` instead of `batch-paper`:
+   ```bash
+   npm start process path/to/your/image.png
+   ```
 
 ## Troubleshooting
 
@@ -88,6 +106,8 @@ If you encounter any issues:
    - "node not found": Restart your Terminal/Command Prompt or reinstall Node.js
    - Permission errors (macOS/Linux): Add `sudo` before commands
    - Path issues: Make sure you're in the correct directory
+   - "batch-paper: command not found": Run `npm link` in the project directory
+   - To remove global command: Run `npm unlink` in the project directory
 
 ## For Developers
 

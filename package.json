@@ -4,7 +4,7 @@
   "description": "CLI tool for batch image processing",
   "main": "dist/index.js",
   "bin": "dist/index.js",
-  "packageManager": "pnpm@10.3.0",
+  "packageManager": "pnpm@10.4.0",
   "engines": {
     "node": ">=22.14.0"
   },
@@ -15,7 +15,8 @@
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\""
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "postinstall": "node -e \"if (process.platform === 'win32') { require('child_process').execSync('npm install --cpu=x64 --os=win32 sharp', { stdio: 'inherit' }) }\""
   },
   "dependencies": {
     "commander": "^13.1.0",
