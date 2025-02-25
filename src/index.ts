@@ -12,8 +12,10 @@ const program = new Command();
 
 program
   .name("batch-paper")
-  .description("CLI tool for batch converting PNGs to PDFs for printing.")
-  .version("1.0.0");
+  .description(
+    "CLI tool for batch converting PNGs to TIFFs for printing. A one-off tool for a specific project."
+  )
+  .version("1.1.0");
 
 const ICC_PROFILE_PATH = path.resolve(__dirname, "../assets/GRACoL2013_CRPC6.icc");
 

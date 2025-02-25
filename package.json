@@ -1,7 +1,7 @@
 {
   "name": "batch-paper",
-  "version": "1.0.0",
-  "description": "CLI tool for batch image processing",
+  "version": "1.0.1",
+  "description": "CLI tool for batch converting PNGs to TIFFs for printing",
   "main": "dist/index.js",
   "bin": "dist/index.js",
   "packageManager": "pnpm@10.4.0",
