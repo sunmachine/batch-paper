@@ -48,12 +48,7 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
       .withIccProfile(ICC_PROFILE_PATH, { attach: true });
 
     const tiffOutput = await tiff.toFile(outputPath);
-    console.log("Processed TIFF output:", tiffOutput);
-
-    // Create a new PDF document
-    // TODO: Figure out why imagemagick is not preserving the ICC profile.
-    // $ identify -verbose [tiff_path]
-    // TODO: Try again later.
+    console.log("TIFF:", tiffOutput);
     console.log(`Processed: ${inputPath} -> ${outputPath}`);
   } catch (error: unknown) {
     if (error instanceof Error) {
