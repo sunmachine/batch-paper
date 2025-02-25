@@ -36,6 +36,7 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
 
     // Convert to CMYK and embed ICC profile
     const tiff = image
+      .resize(1624, 2214, { kernel: "lanczos3" })
       .withMetadata({ density: 600, icc: ICC_PROFILE_PATH })
       .toColourspace("cmyk")
       .tiff({
