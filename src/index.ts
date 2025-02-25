@@ -6,8 +6,6 @@ import { glob } from "glob";
 import path from "path";
 import fs from "fs";
 
-const _DEBUG = false;
-
 const program = new Command();
 
 program
