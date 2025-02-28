@@ -13,7 +13,7 @@ program
   .description(
     "CLI tool for batch converting PNGs to TIFFs for printing. A one-off tool for a specific project."
   )
-  .version("1.1.0");
+  .version("1.2.0");
 
 const ICC_PROFILE_PATH = path.resolve(__dirname, "../assets/GRACoL2013_CRPC6.icc");
 
@@ -36,7 +36,7 @@ async function processImage(inputPath: string, outputDir: string): Promise<void>
 
     // Convert to CMYK and embed ICC profile
     const tiff = image
-      .resize(1624, 2214, { kernel: "lanczos3" })
+      .resize(1624, 2219, { kernel: "lanczos3" })
       .withMetadata({ density: 600, icc: ICC_PROFILE_PATH })
       .toColourspace("cmyk")
       .tiff({
